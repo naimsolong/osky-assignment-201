@@ -6,6 +6,8 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use Symfony\Component\Console\Question\Question;
+
 class RedditSearchCmd extends Command {
     protected static $defaultName = 'reddit:search';
 
@@ -23,7 +25,22 @@ class RedditSearchCmd extends Command {
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        // ... put here the code to create the user
+        $helper = $this->getHelper('question');
+        
+        $output->writeln([
+            'Reddit Search v0.1.0',
+            '====================',
+            '',
+        ]);
+
+        $question = new Question('Please enter the name of the subreddit (default:webdev): ', 'webdev');    
+        $subreddit = $helper->ask($input, $output, $question);
+
+        $question = new Question('Please enter the search term (default:php): ', 'php');    
+        $term = $helper->ask($input, $output, $question);
+
+        $output->writeln('Subreddit => '.$subreddit);
+        $output->writeln('Term => '.$term);
         
         // this method must return an integer number with the "exit status code"
         // of the command. You can also use these constants to make code more readable
