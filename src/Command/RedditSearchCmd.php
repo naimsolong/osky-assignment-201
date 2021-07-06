@@ -2,7 +2,10 @@
 
 namespace Osky\Command;
 
+use Exception;
+use Osky\App\Reddit;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -26,35 +29,36 @@ class RedditSearchCmd extends Command {
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $helper = $this->getHelper('question');
-        
+
         $output->writeln([
-            'Reddit Search v0.1.0',
-            '====================',
+            '<fg=#ff6666>Reddit Search v0.1.0',
+            '====================</>',
             '',
         ]);
 
         $question = new Question('Please enter the name of the subreddit (default:webdev): ', 'webdev');    
-        $subreddit = $helper->ask($input, $output, $question);
+        $subreddit = strtolower(trim($helper->ask($input, $output, $question)));
 
         $question = new Question('Please enter the search term (default:php): ', 'php');    
-        $term = $helper->ask($input, $output, $question);
-
-        $output->writeln('Subreddit => '.$subreddit);
-        $output->writeln('Term => '.$term);
+        $term = strtolower(trim($helper->ask($input, $output, $question)));
         
-        // this method must return an integer number with the "exit status code"
-        // of the command. You can also use these constants to make code more readable
+        $output->writeln([
+            '',
+            'Searching for "'.$term.'" in https://reddit.com/r/'.$subreddit.'/new ...',
+            '',
+        ]);
+        
+        $reddit = (new Reddit($subreddit, $term))->generateToken()->search()->sort()->trim()->get(['created', 'title', 'url', 'selftext']);
 
-        // return this if there was no problem running the command
-        // (it's equivalent to returning int(0))
-        return Command::SUCCESS;
-
-        // or return this if some error happened during the execution
-        // (it's equivalent to returning int(1))
-        // return Command::FAILURE;
-
-        // or return this to indicate incorrect command usage; e.g. invalid options
-        // or missing arguments (it's equivalent to returning int(2))
-        // return Command::INVALID
+        if($reddit->_count > 0)
+        {
+            $table = new Table($output);
+            $table->setHeaders(['Date', 'Title', 'Url', 'Excerpt'])->setRows($reddit->_data);
+            $table->render();
+            return Command::SUCCESS;
+        } else {
+            $output->writeln('No data available!');
+            return Command::FAILURE;
+        }
     }
 }
