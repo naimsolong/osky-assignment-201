@@ -24,6 +24,7 @@ class Reddit {
     
     public $_data;
     public $_count;
+    public $_error;
 
     private $url =
     [
@@ -90,10 +91,12 @@ class Reddit {
         curl_close( $ch );
         
         $this->_data = [];
-        if($response != null)
+        $this->_count = 0;
+        $this->_error = "";
+        
+        if(isset($response->data))
         {
             $temp_children = $response->data->children;
-            $this->_count = 0;
             foreach($temp_children as $child)
             {
                 $temp_data = $child->data;
@@ -107,6 +110,10 @@ class Reddit {
                     $this->_count++;
                 }
             }
+        }
+        else
+        {
+            $this->_error = $response_raw;
         }
 
         return $this;
@@ -129,7 +136,8 @@ class Reddit {
             $term_length = strlen($this->_term);
             $selftext = $this->_data[$i]['selftext'];
             $selftext_length = strlen($selftext);
-            $term_position = strpos($selftext, $this->_term);
+            $term_position = strpos(strtolower($selftext), $this->_term);
+            $exact_term = substr($selftext, $term_position, $term_length);
             if($term_position < $this->selftext_limit)
             {
                 $this->_data[$i]['selftext'] = substr($selftext, 0, $term_position+$this->selftext_limit)."...";
@@ -142,7 +150,7 @@ class Reddit {
             {
                 $this->_data[$i]['selftext'] = '...'.substr($selftext, $term_position-$this->selftext_limit, $term_length+($this->selftext_limit*2)).'...'; 
             }
-            $this->_data[$i]['selftext'] = str_replace($this->_term, '<fg=#ff6666;options=underscore>'.$this->_term.'</>', $this->_data[$i]['selftext']);
+            $this->_data[$i]['selftext'] = str_replace($exact_term, '<fg=#ff6666;options=underscore>'.$exact_term.'</>', $this->_data[$i]['selftext']);
         }
 
         return $this;

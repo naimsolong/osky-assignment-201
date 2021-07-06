@@ -48,17 +48,22 @@ class RedditSearchCmd extends Command {
             '',
         ]);
         
+        
         $reddit = (new Reddit($subreddit, $term))->generateToken()->search()->sort()->trim()->get(['created', 'title', 'url', 'selftext']);
-
-        if($reddit->_count > 0)
+        
+        if($reddit->_count == 0)
         {
-            $table = new Table($output);
-            $table->setHeaders(['Date', 'Title', 'Url', 'Excerpt'])->setRows($reddit->_data);
-            $table->render();
-            return Command::SUCCESS;
-        } else {
-            $output->writeln('No data available!');
+            if($reddit->_error != "")
+                $output->writeln('<fg=white;bg=#ff6666;>ERROR! '.$reddit->_error."</>");
+            else
+                $output->writeln('No data available!');
+
             return Command::FAILURE;
         }
+
+        $table = new Table($output);
+        $table->setHeaders(['Date', 'Title', 'Url', 'Excerpt'])->setRows($reddit->_data);
+        $table->render();
+        return Command::SUCCESS;
     }
 }
