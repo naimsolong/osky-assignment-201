@@ -38,6 +38,7 @@ After done install all required services, may follow these step:
 	```
 	cp .env.example .env
 	``` 
+    ![Alt](./example.png)
 4. Use cmd to view the result
 	```
 	php osky.php reddit:search
