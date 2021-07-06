@@ -9,7 +9,6 @@
     "require": {
         "vlucas/phpdotenv": "^5.3",
         "symfony/console": "^5.3",
-        "guzzlehttp/guzzle": "^7.3",
         "nesbot/carbon": "^2.50"
     },
     "autoload": {
