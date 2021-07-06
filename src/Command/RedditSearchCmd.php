@@ -16,14 +16,7 @@ class RedditSearchCmd extends Command {
 
     protected function configure(): void
     {
-        $this
-            // the short description shown while running "php bin/console list"
-            ->setDescription('Creates a new user.')
-    
-            // the full command description shown when running the command with
-            // the "--help" option
-            ->setHelp('This command allows you to create a user...')
-        ;
+        $this->setDescription('Allow to search subreddit.');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
