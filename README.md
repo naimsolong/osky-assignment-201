@@ -13,15 +13,17 @@ Pre-requisites, need to install Apache service according to your preference, can
 
 **Create a Reddit App**
 
+NOTE: This step is follow this [link](https://www.linkedin.com/pulse/reddit-api-php-justin-stolpe/)
+
 Before we can start coding, we need to create a Reddit App. No Reddit App, no API access. In order to connect to the Reddit API you need a client id, client secret, username, and password. To get these things you need a Reddit app.
 
 Step 1: Login to reddit and go to https://reddit.com/prefs/apps.
 
 Step 2: Under “developer applications” click “create app”.
 
-Step 3: Fill out the app info like the image below and click “create app”. Make sure to select “script” as well. You don’t need to enter an “about url” but a “redirect url” is required. You can enter anything for the “redirect url”.
+Step 3: Fill out the app info like name and description. Make sure to select “script” as well. You don’t need to enter an “about url” but a “redirect url” is required. You can enter anything for the “redirect url”. Then finally, click “create app”.
 
-Step 4: Once your app is created you should see client id, client secret, username, and password, for connecting to the app.
+Step 4: Once your app is created you should see client id, client secret, and username, for connecting to the app.
 
 **Open Project**
 
