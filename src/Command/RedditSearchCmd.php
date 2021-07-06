@@ -46,11 +46,7 @@ class RedditSearchCmd extends Command {
         
         if($reddit->_count == 0)
         {
-            if($reddit->_error != "")
-                $message = $reddit->_error;
-            else
-                $message = 'No data available!';
-                
+            $message = !empty($reddit->_error) ? $reddit->_error : 'No data available!';
             $output->writeln('<fg=white;bg=#ff6666;>ERROR! '.$message."</>");
 
             return Command::FAILURE;

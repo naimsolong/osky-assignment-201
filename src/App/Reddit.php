@@ -92,7 +92,6 @@ class Reddit {
         
         $this->_data = [];
         $this->_count = 0;
-        $this->_error = "";
         
         if(isset($response->data))
         {
